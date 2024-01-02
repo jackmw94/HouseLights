@@ -2722,8 +2722,9 @@ MonoBehaviour:
   text: 'HELLO MILLS '
   character: 1
   label: {fileID: 1856630038}
-  count: 11
-  currentChar: ' '
+  showDuration: 0
+  count: 12
+  currentChar: E
 --- !u!95 &1856630042
 Animator:
   serializedVersion: 5
