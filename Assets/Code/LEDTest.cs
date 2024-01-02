@@ -1,12 +1,12 @@
 using UnityEngine;
-using System.IO.Ports;
 using System.Collections;
 
 public class LEDTest : MonoBehaviour
 {
-    [SerializeField] private LEDEncoder ledCommunication;
+    [SerializeField] private LEDDispatcher dispatcher;
     [Space]
-    [SerializeField, Range(0,400)] private int index;
+    [SerializeField] private int ledCount = 400;
+    [SerializeField, Range(0,800)] private int ledId;
     [SerializeField] private Color colour;
     [Space]
     [SerializeField] private float testDelay = 0.05f;
@@ -17,15 +17,15 @@ public class LEDTest : MonoBehaviour
     [ContextMenu(nameof(Send))]
     private void Send()
     {
-        ledCommunication.UpdateLED(index, colour);
+        dispatcher.UpdateLED(ledId, colour);
     }
 
     [ContextMenu(nameof(ResetAll))]
-    private void ResetAll()
+    public void ResetAll()
     {
-        for (int i = 0; i < 400; i++)
+        for (int i = 0; i < ledCount; i++)
         {
-            ledCommunication.UpdateLED(i, Color.black);
+            dispatcher.UpdateLED(i, Color.black);
         }
     }
 
@@ -38,9 +38,9 @@ public class LEDTest : MonoBehaviour
     private IEnumerator RunStripInternal()
     {
         WaitForSeconds wait = new WaitForSeconds(testDelay);
-        for (int i = 0; i < 400; i++)
+        for (int i = 0; i < ledCount; i++)
         {
-            ledCommunication.UpdateLED(i, colour);
+            dispatcher.UpdateLED(i, colour);
             yield return wait;
         }
     }
@@ -63,10 +63,10 @@ public class LEDTest : MonoBehaviour
         WaitForSeconds wait = new WaitForSeconds(testDelay);
         while (true)
         {           
-            for (int i = 0; i < 400; i++)
+            for (int i = 0; i < ledCount; i++)
             {
-                Color color = Color.HSVToRGB(((Time.time * testColorChange) + (i / 400f)) % 1, 1f, 1f);
-                ledCommunication.UpdateLED(i, color);
+                Color color = Color.HSVToRGB(((Time.time * testColorChange) + (i / (float)ledCount)) % 1, 1f, 1f);
+                dispatcher.UpdateLED(i, color);
             }
 
             yield return wait;

@@ -27,7 +27,7 @@ public class LEDChangeEncoder : LEDEncoder
     private readonly Dictionary<int, byte> cachedSent = new();
     private readonly List<int> toRemove = new();
 
-    private readonly byte[] writeBuffer = new byte[500 * PacketSize];
+    private readonly byte[] writeBuffer = new byte[400 * PacketSize];
 
     private void LateUpdate()
     {
@@ -102,7 +102,5 @@ public class LEDChangeEncoder : LEDEncoder
         }
 
         return true;
-    }
-
-   
+    }   
 }

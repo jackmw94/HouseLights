@@ -10,34 +10,9 @@ public class LEDData : ScriptableObject
 
     private List<Vector2> backupPositions;
 
-    public Vector2 GetPosition(int index) => normalisedPositions[index];
+    public Vector2 GetPosition(int ledId) => normalisedPositions[ledId];
 
     public int LightCount => normalisedPositions.Count;
-
-    [ContextMenu(nameof(LoadLightDataFromFile))]
-    private void LoadLightDataFromFile()
-    {
-        string csv = lightDataCSV.text;
-        string[] lines = csv.Split('\n');
-        normalisedPositions = new List<Vector2>(lines.Length);
-
-        foreach (string line in lines)
-        {
-            if (string.IsNullOrEmpty(line))
-            {
-                continue;
-            }
-
-            string[] values = line.Split(',');
-            Debug.Log($"Line '{line}' has #{values.Length} values");
-
-            float x = float.Parse(values[0]);
-            float y = 1f - float.Parse(values[1]);
-            Vector2 position = new Vector2(x, y);
-
-            normalisedPositions.Add(position);
-        }
-    }
 
     public void Backup()
     {

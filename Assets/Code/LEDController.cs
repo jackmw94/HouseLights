@@ -10,7 +10,7 @@ public class LEDController : MonoBehaviour
     [SerializeField] private Rect validLEDBounds;
     [Space]
     [SerializeField] private RenderTexture renderTexture;
-    [SerializeField] private LEDEncoder lightCommunication;
+    [SerializeField] private LEDDispatcher dispatcher;
     [Space]
     [SerializeField] private bool gizmosUpdateColourInPlayMode = false;
     [SerializeField] private float gizmoSize = 0.01f;
@@ -25,10 +25,21 @@ public class LEDController : MonoBehaviour
 
     private void Awake()
     {
+        ResetAll();
+    }
+
+    private void OnDestroy()
+    {
+        ResetAll();
+    }
+
+    private void ResetAll()
+    {
         colours = new Color[lightData.LightCount];
         for (int i = 0; i < lightData.LightCount; i++)
         {
             colours[i] = Color.black;
+            dispatcher.UpdateLED(i, colours[i]);
         }
     }
 
@@ -49,7 +60,7 @@ public class LEDController : MonoBehaviour
 
             if (!ColoursEqual_NoAlpha(current, previous))
             {
-                lightCommunication.UpdateLED(i, current);
+                dispatcher.UpdateLED(i, current);
                 colours[i] = current;
             }
         }
@@ -63,7 +74,7 @@ public class LEDController : MonoBehaviour
     [ContextMenu(nameof(DebugUpdate))]
     private void DebugUpdate()
     {
-        lightCommunication.UpdateLED(0, Color.magenta);
+        dispatcher.UpdateLED(0, Color.magenta);
     }
 
     private Color GetCurrentColour(Vector2 normalisedPosition)
@@ -108,11 +119,11 @@ public class LEDController : MonoBehaviour
         }
     }
 
-    private Vector2 GetPosition(int index)
+    private Vector2 GetPosition(int ledId)
     {
         Vector2 midWay = Vector2.one / 2f;
 
-        Vector2 transformedPosition = lightData.GetPosition(index);
+        Vector2 transformedPosition = lightData.GetPosition(ledId);
 
         transformedPosition = transformedPosition + offset;
         transformedPosition = (transformedPosition - midWay) * tiling + midWay;

@@ -15,8 +15,9 @@ public class CameraLEDSetup : MonoBehaviour
     }
 
     [SerializeField] private RenderTexture setupRT;
-    [SerializeField] private LEDChangeEncoder ledCommunication;
+    [SerializeField] private LEDDispatcher dispatcher;
     [Space]
+    [SerializeField] private int ledStartId = 0;
     [SerializeField] private int ledCount = 100;
     [SerializeField] private LEDData ledData;
     [Space]
@@ -51,7 +52,7 @@ public class CameraLEDSetup : MonoBehaviour
             positions[i] = ledData.GetPosition(i);
         }
 
-        AdjustIndex(0);
+        AdjustIndex(ledStartId);
         yield return RefreshCurrentLED();
 
         bool next = false;
@@ -162,7 +163,7 @@ public class CameraLEDSetup : MonoBehaviour
         }
 
         currentLED = index;
-        ledCommunication.UpdateLED(index, Color.green * colourStrength);
+        dispatcher.UpdateLED(index, Color.green * colourStrength);
 
         yield return new WaitForSeconds(enableLedDelay);
     }
@@ -171,7 +172,7 @@ public class CameraLEDSetup : MonoBehaviour
     {
         if (currentLED != -1)
         {
-            ledCommunication.UpdateLED(currentLED, Color.black);
+            dispatcher.UpdateLED(currentLED, Color.black);
             currentLED = -1;
         }
     }

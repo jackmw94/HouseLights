@@ -15,8 +15,11 @@ public class UDPTransmitter : LEDTransmitter
 
     private async void Initialise()
     {
-        client = new UdpClient(endPoint.port);
+        client = new UdpClient();
         IPEndPoint ep = new IPEndPoint(IPAddress.Parse(endPoint.url), endPoint.port);
+        //client.ExclusiveAddressUse = false;
+        //client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+        //client.Client.Bind(ep);
         client.Connect(ep);
     }
 
