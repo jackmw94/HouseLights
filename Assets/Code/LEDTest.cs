@@ -60,7 +60,7 @@ public class LEDTest : MonoBehaviour
 
     private IEnumerator RunLoopInternal()
     {
-        WaitForSeconds wait = new WaitForSeconds(testDelay);
+        WaitForSeconds wait = new(testDelay);
         while (true)
         {           
             for (int i = 0; i < ledCount; i++)

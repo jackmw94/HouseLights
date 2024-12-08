@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "LightData", menuName = "Create LightData")]
@@ -13,12 +14,12 @@ public class LEDData : ScriptableObject
     public Vector2 GetPosition(int ledId) => normalisedPositions[ledId];
 
     public int LightCount => normalisedPositions.Count;
-
+    
     public void Backup()
     {
         backupPositions = new List<Vector2>(normalisedPositions);
     }
-
+    
     public void LoadBackup()
     {
         normalisedPositions = new List<Vector2>(backupPositions);

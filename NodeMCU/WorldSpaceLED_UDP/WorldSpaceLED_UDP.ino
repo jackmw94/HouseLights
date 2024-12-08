@@ -3,9 +3,9 @@
 #include <WiFiUdp.h>
 
 // --- LED CONFIGURATION ---
-#define NUM_STRIPS 4
+#define NUM_STRIPS 5
 #define NUM_LEDS_PER_STRIP 100
-#define NUM_LEDS 400
+#define NUM_LEDS 500
 
 // --- DATA CONFIGURATION ---
 #define PACKET_SIZE 2
@@ -32,12 +32,13 @@ bool received = false;
 
 void setup() {
 
-  Serial.begin(512000);  /// 921600 ?
+  Serial.begin(921600);  /// 921600 ?
 
   FastLED.addLeds<NEOPIXEL, 16>(leds, 0 * NUM_LEDS_PER_STRIP, NUM_LEDS_PER_STRIP);
   FastLED.addLeds<NEOPIXEL, 5>(leds, 1 * NUM_LEDS_PER_STRIP, NUM_LEDS_PER_STRIP);
   FastLED.addLeds<NEOPIXEL, 4>(leds, 2 * NUM_LEDS_PER_STRIP, NUM_LEDS_PER_STRIP);
   FastLED.addLeds<NEOPIXEL, 0>(leds, 3 * NUM_LEDS_PER_STRIP, NUM_LEDS_PER_STRIP);
+  FastLED.addLeds<NEOPIXEL, 14>(leds, 4 * NUM_LEDS_PER_STRIP, NUM_LEDS_PER_STRIP);
 
   if (USE_UDP) SetupUDP();
 }
@@ -75,18 +76,11 @@ void loop() {
     FastLED.show();
   }
 
-  if (!received && oncePerTenSeconds) {
-    //udpDataReceiver.write(WiFi.localIP().toString().c_str());
-    //udpDataReceiver.beginPacket(IPAddress(255,255,255,255), 8888);
-    //udpDataReceiver.write(WiFi.localIP().toString().c_str());
-    //udpDataReceiver.endPacket();
-  }
-
   if (PRINT_IP && oncePerTenSeconds) {
     Serial.printf("Broadcasting: %s \n", WiFi.localIP().toString().c_str());
-  }
+  }  
 
-  //delay(5);
+  delay(5);
 }
 
 bool ReceiveDataUDP() {

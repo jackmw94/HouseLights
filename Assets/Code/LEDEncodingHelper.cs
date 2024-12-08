@@ -7,11 +7,11 @@ public static class LEDEncodingHelper
         byte x1 = (byte)(index & 0xff);
         byte x2 = (byte)((index >> 8) & 0x03);
 
-        int intR = (int)Mathf.Clamp(Mathf.Floor(colour.r * 4f), 0, 3);
+        int intR = (int)Mathf.Clamp(Mathf.Floor(colour.g * 4f), 0, 3);
         byte encodedR = (byte)(intR & 0x03);
         byte shiftedR = (byte)(encodedR << 6);
 
-        int intG = (int)Mathf.Clamp(Mathf.Floor(colour.g * 4f), 0, 3);
+        int intG = (int)Mathf.Clamp(Mathf.Floor(colour.r * 4f), 0, 3);
         byte encodedG = (byte)(intG & 0x03);
         byte shiftedG = (byte)(encodedG << 4);
 
@@ -43,7 +43,7 @@ public static class LEDEncodingHelper
         float b3 = b2 / 3f;
         int b = Mathf.FloorToInt(b3 * 255);
 
-        Color reconstructed = new Color(r / 255f, g / 255f, b / 255f);
+        Color reconstructed = new Color(g / 255f, r / 255f, b / 255f);
         return reconstructed;
     }
 }

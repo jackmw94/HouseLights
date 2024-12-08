@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class DisplayWebCam : MonoBehaviour
 {
+    private static readonly int BaseMap = Shader.PropertyToID("_BaseMap");
+
     void Start()
     {
         WebCamDevice[] devices = WebCamTexture.devices;
@@ -21,7 +23,7 @@ public class DisplayWebCam : MonoBehaviour
         foreach (Renderer renderer in renderers)
         {
             MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
-            propertyBlock.SetTexture("_BaseMap", tex);
+            propertyBlock.SetTexture(BaseMap, tex);
             renderer.SetPropertyBlock(propertyBlock);
         }
         tex.Play();

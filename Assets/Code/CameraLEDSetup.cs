@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -14,7 +15,8 @@ public class CameraLEDSetup : MonoBehaviour
         Revision
     }
 
-    [SerializeField] private RenderTexture setupRT;
+    [SerializeField] private PositionProvider positionProvider;
+    [SerializeField] private LEDTarget[] targets;
     [SerializeField] private LEDDispatcher dispatcher;
     [Space]
     [SerializeField] private int ledStartId = 0;
@@ -40,8 +42,7 @@ public class CameraLEDSetup : MonoBehaviour
     private Vector2 currentPosition;
     private Vector2 averagePosition;
 
-    Texture2D cachedTexture_BackingField;
-    Texture2D CachedTexture => cachedTexture_BackingField ?? (cachedTexture_BackingField = new Texture2D(setupRT.width, setupRT.height));
+    
 
     private IEnumerator Start()
     {
@@ -61,7 +62,7 @@ public class CameraLEDSetup : MonoBehaviour
         bool save = false;       
         bool revertToBackup = false;       
 
-        while (true)
+        while (Application.isPlaying)
         {
             if (update)
             {
@@ -93,6 +94,11 @@ public class CameraLEDSetup : MonoBehaviour
                 Debug.Assert(!(next && previous), "Trying to go back and forward at same time");
                 AdjustIndex(next ? 1 : -1);
 
+                foreach (LEDTarget ledTarget in targets)
+                {
+                    ledTarget.ResetTarget();
+                }
+
                 yield return RefreshCurrentLED();
 
                 queuedGuesses.Clear();
@@ -101,8 +107,8 @@ public class CameraLEDSetup : MonoBehaviour
                 previous = false;
             }
 
-            currentPosition = GetPositionFromTexture();
-            UpdateAverage();
+            currentPosition = positionProvider.GetPosition();
+            UpdateTarget();
 
             float delayStart = Time.time;
             while (Time.time - delayStart < updateDelay)
@@ -141,7 +147,7 @@ public class CameraLEDSetup : MonoBehaviour
         return agreementValue < agreementThreshold;
     }
 
-    private void UpdateAverage()
+    private void UpdateTarget()
     {
         queuedGuesses.Enqueue(currentPosition);
         if (queuedGuesses.Count > queueSize) queuedGuesses.Dequeue();
@@ -152,9 +158,14 @@ public class CameraLEDSetup : MonoBehaviour
             averagePosition += pos;
         }
         averagePosition /= queuedGuesses.Count;
+        
+        foreach (LEDTarget ledTarget in targets)
+        {
+            ledTarget.SetTargetGuess(averagePosition);
+        }
     }
 
-    [ContextMenu(nameof(RefreshCurrentLED))]
+    [Button]
     private IEnumerator RefreshCurrentLED()
     {
         if (currentLED != index)
@@ -182,44 +193,7 @@ public class CameraLEDSetup : MonoBehaviour
         index = Mathf.Clamp(index + offset, 0, ledCount - 1);
         print($"LED #{index}");
     }
-
-    private Vector2 GetPositionFromTexture()
-    {
-        UpdateCachedTexture();
-
-        Vector2Int maxPixelCoord = new Vector2Int();
-        float maxPixelValue = -1;
-
-        for (int x = 0; x < setupRT.width; x++)
-        {
-            for (int y = 0; y < setupRT.height; y++)
-            {
-                var pixelValue = CachedTexture.GetPixel(x, y).grayscale;
-                if (pixelValue > maxPixelValue)
-                {
-                    maxPixelCoord = new Vector2Int(x, y);
-                    maxPixelValue = pixelValue;
-                }
-            }
-        }
-
-        float normX = maxPixelCoord.x / (float)setupRT.width;
-        float normY = maxPixelCoord.y / (float)setupRT.height;
-
-        return new Vector2(normX, normY);
-    }
-
-    private void UpdateCachedTexture()
-    {
-        RenderTexture previousActive = RenderTexture.active;
-
-        RenderTexture.active = setupRT;
-        CachedTexture.ReadPixels(new Rect(0, 0, setupRT.width, setupRT.height), 0, 0);
-        CachedTexture.Apply();
-
-        RenderTexture.active = previousActive;
-    }
-
+    
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;

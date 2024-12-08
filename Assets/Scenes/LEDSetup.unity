@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -155,8 +154,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   setupRT: {fileID: 8400000, guid: 5643396b7d2455a4d9e3e393b805fd88, type: 2}
   dispatcher: {fileID: 348248976}
-  ledStartId: 300
-  ledCount: 800
+  ledStartId: 0
+  ledCount: 500
   ledData: {fileID: 11400000, guid: 79ad843151b9ab84fb457257aa66ed0f, type: 2}
   waitForUserInput: 1
   agreementThreshold: 0.0075
@@ -196,7 +195,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dispatcher: {fileID: 348248976}
-  ledCount: 800
+  ledCount: 500
   ledId: 0
   colour: {r: 0, g: 0, b: 0, a: 0}
   testDelay: 0.05
@@ -351,12 +350,12 @@ MonoBehaviour:
   m_RequiresColorTexture: 0
   m_Version: 2
   m_TaaSettings:
-    quality: 3
-    frameInfluence: 0.1
-    jitterScale: 1
-    mipBias: 0
-    varianceClampScale: 0.9
-    contrastAdaptiveSharpening: 0
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
 --- !u!1 &1981843498
 GameObject:
   m_ObjectHideFlags: 0
@@ -428,12 +427,12 @@ MonoBehaviour:
   m_RequiresColorTexture: 0
   m_Version: 2
   m_TaaSettings:
-    quality: 3
-    frameInfluence: 0.1
-    jitterScale: 1
-    mipBias: 0
-    varianceClampScale: 0.9
-    contrastAdaptiveSharpening: 0
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
 --- !u!20 &1981843502
 Camera:
   m_ObjectHideFlags: 0
@@ -541,6 +540,26 @@ PrefabInstance:
     - target: {fileID: 3276707196139002623, guid: a618fc8618d306242a5d1cbeb31b32aa,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4611903343718692893, guid: a618fc8618d306242a5d1cbeb31b32aa,
+        type: 3}
+      propertyPath: endPoint.url
+      value: 192.168.0.131
+      objectReference: {fileID: 0}
+    - target: {fileID: 5295736161086726420, guid: a618fc8618d306242a5d1cbeb31b32aa,
+        type: 3}
+      propertyPath: sections.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5295736161086726420, guid: a618fc8618d306242a5d1cbeb31b32aa,
+        type: 3}
+      propertyPath: sections.Array.data[0].toIndex
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 6693444126555954644, guid: a618fc8618d306242a5d1cbeb31b32aa,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9108426648931407590, guid: a618fc8618d306242a5d1cbeb31b32aa,

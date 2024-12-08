@@ -9,7 +9,7 @@ public class LEDRefreshEncoder : LEDEncoder
     [Space]
     [SerializeField] private int sendDataEveryNFrames = 5;
     
-    private readonly byte[] writeBuffer = new byte[400 * PacketSize];
+    private readonly byte[] writeBuffer = new byte[500 * PacketSize];
 
     private void LateUpdate()
     {
