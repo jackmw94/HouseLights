@@ -1,9 +1,7 @@
-using System;
 using NaughtyAttributes;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class LEDTarget : MonoBehaviour
+public class LEDTarget : PositionProvider
 {
     [SerializeField] private LEDArea targetArea;
     
@@ -14,14 +12,27 @@ public class LEDTarget : MonoBehaviour
     private Vector2 current;
     private Vector3? mousePreviousPosition;
 
-    public bool IsOverridden => overridden;
-
     private void OnEnable()
     {
         Application.focusChanged += b =>
         {
             mousePreviousPosition = null;
         };
+    }
+
+    public override void Setup(Vector2? initialPosition = null)
+    {
+        overridden = false;
+    }
+
+    public override Vector2 GetPosition()
+    {
+        return current;
+    }
+
+    public override bool IsConfident()
+    {
+        return overridden;
     }
 
     private void Update()
@@ -54,11 +65,5 @@ public class LEDTarget : MonoBehaviour
     public void SetTargetGuess(Vector2 guessedTarget)
     {
         guess = guessedTarget;
-    }
-
-    [Button]
-    public void ResetTarget()
-    {
-        overridden = false;
     }
 }
