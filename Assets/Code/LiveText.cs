@@ -18,7 +18,7 @@ public class LiveText : MonoBehaviour
         var currentKey = GetCurrentKeyDown();
         if (currentKey.HasValue)
         {
-            label.text = currentKey.Value == KeyCode.Escape ? "" : currentKey.Value.ToString();
+            label.text = currentKey.Value == KeyCode.Escape || currentKey.Value == KeyCode.Space ? "" : currentKey.Value.ToString();
         }
     }
 

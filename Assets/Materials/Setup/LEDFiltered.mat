@@ -40,11 +40,11 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _ChromaKeyHue: 0.962
-    - _Contrast: 1.67
+    - _ChromaKeyHue: 0
+    - _Contrast: 6
     - _FILTER: 1
     - _LOD: 0
-    - _Prefilter: 0.83
-    - _Threshold: 0.5
+    - _Prefilter: 0.2
+    - _Threshold: 0.03
     m_Colors: []
   m_BuildTextureStacks: []

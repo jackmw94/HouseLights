@@ -26,6 +26,8 @@ public class CameraLEDSetup : MonoBehaviour
     private Vector2 currentPosition;
     private Vector2 averagePosition;
 
+    private Coroutine reloadPositionProvider = null;
+
     private void OnEnable()
     {
         StartCoroutine(RunSetup());
@@ -33,18 +35,24 @@ public class CameraLEDSetup : MonoBehaviour
 
     private IEnumerator RunSetup()
     {
-        yield return Initialise();
+        Initialise();
 
         while (gameObject)
         {
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                yield return AdjustIndexAsync(1);
+                AdjustIndex(1);
             }
 
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                yield return AdjustIndexAsync(-1);
+                AdjustIndex(-1);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                positions[index] = positionProvider.GetPosition();
+                AdjustIndex(1);
             }
 
             yield return null;
@@ -88,7 +96,7 @@ public class CameraLEDSetup : MonoBehaviour
         // }
     }
 
-    private IEnumerator Initialise()
+    private void Initialise()
     {
         ledData.Backup();
         positions = new Vector2[ledCount];
@@ -98,15 +106,15 @@ public class CameraLEDSetup : MonoBehaviour
         }
 
         index = ledStartIndex;
-        yield return RefreshCurrentLED();
+        RefreshCurrentLED();
     }
 
-    private IEnumerator AdjustIndexAsync(int offset)
+    private void AdjustIndex(int offset)
     {
         index = Mathf.Clamp(index + offset, 0, ledCount - 1);
         Debug.Log($"LED #{index}");
         
-        yield return RefreshCurrentLED();
+        RefreshCurrentLED();
     }
 
     [Button(enabledMode: EButtonEnableMode.Playmode)]
@@ -130,7 +138,7 @@ public class CameraLEDSetup : MonoBehaviour
     }
     
     [Button]
-    private IEnumerator RefreshCurrentLED()
+    private void RefreshCurrentLED()
     {
         if (currentLED != index)
         {
@@ -139,9 +147,19 @@ public class CameraLEDSetup : MonoBehaviour
 
         currentLED = index;
         dispatcher.UpdateLED(index, colour);
+        
+        
+        if (reloadPositionProvider != null) StopCoroutine(reloadPositionProvider);
+        reloadPositionProvider = StartCoroutine(ReloadPositionProvider());
+    }
 
+    private IEnumerator ReloadPositionProvider()
+    {
+        positionProvider.gameObject.SetActive(false);
+        
         yield return new WaitForSeconds(enableLedDelay);
         
+        positionProvider.gameObject.SetActive(true);
         positionProvider.Setup(positions[currentLED]);
     }
 

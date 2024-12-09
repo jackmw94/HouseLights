@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using NaughtyAttributes;
 using UnityEngine;
 
 public class ImageDetectionPositionProvider : PositionProvider
@@ -7,6 +10,9 @@ public class ImageDetectionPositionProvider : PositionProvider
     [Space] 
     [SerializeField, Min(1)] private int updateEveryNFrames = 10;
     [SerializeField] private int queueSize = 20;
+    [SerializeField] private int kernelSize = 7;
+    [SerializeField] private int stride = 3;
+    [SerializeField] private bool flipY;
     [Space]
     [SerializeField] private float agreementThreshold = 0.0075f;
     
@@ -14,7 +20,7 @@ public class ImageDetectionPositionProvider : PositionProvider
     
     Texture2D cachedTexture;
     Texture2D CachedTexture => cachedTexture ? cachedTexture : (cachedTexture = new Texture2D(setupRT.width, setupRT.height));
-
+    
     private void Update()
     {
         if (Time.frameCount % updateEveryNFrames == 0)
@@ -53,28 +59,28 @@ public class ImageDetectionPositionProvider : PositionProvider
     private Vector2 GetGuess()
     {
         UpdateCachedTexture();
-
+        
         Vector2Int maxPixelCoordinate = new();
-        float maxPixelValue = -1;
+        float maxValue = float.MinValue;
 
-        foreach (Vector2Int pixelCoordinate in GetPixelCoordinates())
+        foreach (ConvolutionUtility.ConvolutionContext convolutionContext in ConvolutionUtility.Convolve(CachedTexture, kernelSize, stride))
         {
-            int x = pixelCoordinate.x;
-            int y = pixelCoordinate.y;
-            
-            float pixelValue = CachedTexture.GetPixel(x, y).grayscale;
-            if (pixelValue <= maxPixelValue)
+            float kernelValue = convolutionContext.Pixels.Sum(p => p.grayscale);
+            if (kernelValue > maxValue)
             {
-                continue;
+                maxPixelCoordinate = convolutionContext.Centre;
+                maxValue = kernelValue;
             }
-            
-            maxPixelCoordinate = new Vector2Int(x, y);
-            maxPixelValue = pixelValue;
         }
         
         float normX = maxPixelCoordinate.x / (float)setupRT.width;
         float normY = maxPixelCoordinate.y / (float)setupRT.height;
 
+        if (flipY)
+        {
+            normY = 1f - normY;
+        }
+        
         return new Vector2(normX, normY);
     }
 
@@ -132,5 +138,11 @@ public class ImageDetectionPositionProvider : PositionProvider
         agreementValue /= queueSize;
 
         return agreementValue;
+    }
+
+    [Button]
+    private void ResetGuesses()
+    {
+        queuedGuesses.Clear();
     }
 }
