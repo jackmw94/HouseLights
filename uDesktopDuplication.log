@@ -1,0 +1,22 @@
+[uDD::Log][2024-12-16 13:06:33] Start
+[uDD::Log][2024-12-16 13:06:33] OS Version    : 10.0
+[uDD::Log][2024-12-16 13:06:33] Build Number  : 22631
+[uDD::Log][2024-12-16 13:06:33] Service Pack  : 
+[uDD::Log][2024-12-16 13:06:33] Graphics Card [0] : NVIDIA GeForce RTX 4080
+[uDD::Log][2024-12-16 13:06:33]   > Monitor[0] : \\.\DISPLAY1
+[uDD::Log][2024-12-16 13:06:33]   > Monitor[1] : \\.\DISPLAY2
+[uDD::Log][2024-12-16 13:06:33] Graphics Card [1] : NVIDIA GeForce RTX 4080
+[uDD::Log][2024-12-16 13:06:33] Graphics Card [2] : Microsoft Basic Render Driver
+[uDD::Log][2024-12-16 13:06:33] Monitor::Initialized() =>
+[uDD::Log][2024-12-16 13:06:33]     ID    : 0
+[uDD::Log][2024-12-16 13:06:33]     Size  : (1920, 1080)
+[uDD::Log][2024-12-16 13:06:33]     DPI   : (92, 92)
+[uDD::Log][2024-12-16 13:06:33]     Rot   : Landscape
+[uDD::Log][2024-12-16 13:06:33] Duplicator::Initialize() => OK.
+[uDD::Log][2024-12-16 13:06:33] Monitor::Initialized() =>
+[uDD::Log][2024-12-16 13:06:33]     ID    : 1
+[uDD::Log][2024-12-16 13:06:33]     Size  : (1920, 1080)
+[uDD::Log][2024-12-16 13:06:33]     DPI   : (92, 92)
+[uDD::Log][2024-12-16 13:06:33]     Rot   : Landscape
+[uDD::Log][2024-12-16 13:06:33] Duplicator::Initialize() => OK.
+[uDD::Log][2024-12-16 13:08:31] Stop

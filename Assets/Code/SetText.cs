@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
-public class SetText : MonoBehaviour
+public class SetText : TimedEffect
 {
     [SerializeField] private string text;
     [SerializeField] private int character;
@@ -19,12 +20,19 @@ public class SetText : MonoBehaviour
     {
         count = text.Length;
         currentChar = text.Substring(character, 1);
+        gameObject.name = text;
     }
 
-    private IEnumerator Start()
+    private void OnEnable()
+    {
+        StartCoroutine(RunEffect());
+    }
+
+    private IEnumerator RunEffect()
     {
         while (true)
         {
+            IsFinished = false;
             string currentText = text.Substring(character, 1);
             label.text = currentText;
 
@@ -47,7 +55,10 @@ public class SetText : MonoBehaviour
             {
                 character = 0;
                 label.text = "";
-                yield return new WaitForSeconds(rerunPauseDuration);
+                
+                yield return new WaitForSeconds(rerunPauseDuration / 2f);
+                IsFinished = true;
+                yield return new WaitForSeconds(rerunPauseDuration / 2f);
             }
 
             yield return null;

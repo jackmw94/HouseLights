@@ -18,7 +18,7 @@ public class LEDController : MonoBehaviour
     private Color[] colours;
 
     Texture2D cachedTexture_BackingField;
-    Texture2D CachedTexture => cachedTexture_BackingField ?? (cachedTexture_BackingField = new Texture2D(renderTexture.width, renderTexture.height));
+    Texture2D CachedTexture => cachedTexture_BackingField ? cachedTexture_BackingField : (cachedTexture_BackingField = new Texture2D(renderTexture.width, renderTexture.height));
 
     private bool ShouldGizmosUpdateColour => gizmosUpdateColourInPlayMode || !Application.isPlaying;
     private int LEDCount => limitLEDCount == -1 ? lightData.LightCount : Mathf.Min(limitLEDCount, lightData.LightCount);
